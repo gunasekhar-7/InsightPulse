@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>InsightPulse – Sentiment Analysis</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 id="main-title">InsightPulse <span aria-label="wave" role="img">💡</span></h1>
+      <p aria-live="polite">Analyze the sentiment of any text — powered by Machine Learning.</p>
+      <button id="themeToggle" aria-label="Toggle dark/light mode">🌙</button>
+    </header>
+    <main>
+      <section>
+        <h2>Enter Text for Analysis</h2>
+        <label for="textInput" class="visually-hidden">Text to analyze</label>
+        <textarea id="textInput" aria-label="Text to analyze" placeholder="Type or paste your text here..." rows="6"></textarea>
+        <div>
+          <button id="analyzeButton" class="btn btn-primary" aria-label="Analyze Sentiment">Analyze Sentiment</button>
+          <button id="exampleButton" class="btn" aria-label="Use Example Text">Try Example</button>
+        </div>
+        <div id="loadingIndicator" class="loading-spinner" aria-live="polite"></div>
+        <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
+      </section>
+      <section class="results-section">
+        <h2>Analysis Results</h2>
+        <div id="resultsContainer" class="results-grid" style="display:none">
+          <div class="result-card sentiment-card">
+            <h3>Overall Sentiment</h3>
+            <span id="sentimentIcon" class="fas" aria-hidden="true"></span>
+            <span id="overallSentiment" aria-live="polite"></span>
+          </div>
+          <div class="result-card chart-card">
+            <h3>Sentiment Breakdown</h3>
+            <canvas id="sentimentChart" height="160" aria-label="Sentiment Probability Chart"></canvas>
+          </div>
+        </div>
+        <div id="cleanedTextDisplay" class="cleaned-text-display" style="display:none">
+          <h4>Cleaned Text</h4>
+          <div id="displayCleanedText"></div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <p>InsightPulse &copy; 2025. <span aria-label="rocket" role="img">🚀</span></p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

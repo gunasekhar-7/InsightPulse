@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+ENV/
+env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# VSCode settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Model artifacts and datasets
+backend/models/*.pkl
+backend/models/*.joblib
+backend/models/*.h5
+backend/models/metrics.json
+*.csv
+*.tsv
+
+# NLTK data downloads (if any, not needed unless you download them locally)
+nltk_data/
+
+# Frontend node_modules (if you ever add a frontend build)
+frontend/node_modules/
+
+# Frontend build/dist files (if you use build tools in future)
+frontend/dist/
+frontend/build/
+
+# Other system files
+*.bak
+*.swp
