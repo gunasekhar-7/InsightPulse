@@ -26,60 +26,52 @@ Recruiters, technical stakeholders, and developers seeking a **clear, maintainab
 ## :open_file_folder: Project Structure
 
 InsightPulse/
-│
-├── .env                        # Environment variables (never committed)
-├── .env.example                # Example env file (for onboarding)
-├── .gitignore                  # Files to exclude from version control
-├── README.md                   # Project docs, setup, usage, logging overview
-│
-├── backend/
-│   ├── main.py                 # FastAPI app entrypoint
-│   ├── requirements.txt        # Python dependencies (prod-ready)
-│   ├── Dockerfile              # Container build definition (multi-stage, secure)
-│   ├── logging_config.py       # Centralized, structured logging config
-│   │
+├── .env                     # Real environment (private, not committed)
+├── .env.example             # Public config template
+├── .gitignore               # Ignore rules
+├── README.md                # Documentation
+
+├── backend/                 # FastAPI backend
+│   ├── main.py              # API entrypoint
+│   ├── train_model.py       # Model training script
+│   ├── requirements.txt     # Backend dependencies
+│   ├── Dockerfile           # Backend Docker container spec
 │   ├── core/
-│   │   ├── config.py           # Settings and environment management
-│   │   └── (your custom modules)
-│   │
+│   │   ├── config.py
+│   │   └── logging_config.py
 │   ├── api/
-│   │   ├── deps.py             # Authentication, rate-limiting, dependencies
-│   │   └── (future endpoints)
-│   │
+│   │   └── deps.py
 │   ├── models/
-│   │   └── __init__.py         # ML model loader, versioning, health checks
-│   │
+│   │   └── __init__.py
 │   ├── services/
-│   │   ├── cache.py            # Redis-backed caching
-│   │   └── cleaner.py          # Text preprocessing/NLP cleaning
-│   │
-│   ├── train_model.py          # ML training, evaluation, and export pipeline
-│   │
-│   └── (future: test/)         # Unit/integration tests
+│   │   ├── cache.py
+│   │   └── cleaner.py
+│   └── logs/
+│       └── app.log
 │
-├── frontend/
-│   ├── index.html              # Main app HTML
-│   ├── style.css               # Stylesheet (themes, responsive)
-│   ├── script.js               # All client-side logic
-│   ├── manifest.json           # PWA configuration
-│   ├── sw.js                   # Service Worker (offline/PWA)
+├── models/                  # Versioned model artifacts (timestamped folders)
+│   └── <timestamp>/         # e.g. 2025-07-26T16-02-54
+│       ├── sentiment_model.pkl
+│       ├── tfidf_vectorizer.pkl
+│       └── metrics.json
+│
+├── data/                    # Training datasets
+│   ├── train.csv
+│   └── (test.csv etc.)
+│
+├── frontend/                # Static PWA frontend
+│   ├── index.html
+│   ├── script.js
+│   ├── style.css
+│   ├── manifest.json
+│   ├── sw.js
 │   └── icons/
-│       ├── icon-192.png        # App icon
-│       └── icon-512.png        # App icon
-│
-├── models/                     # All trained model versions
-│   ├── 2025-07-23T18-30-00/    # Example timestamped model folder
-│   │   ├── tfidf_vectorizer.pkl
-│   │   ├── sentiment_model.pkl
-│   │   └── metrics.json
-│   └── ...                     # More model versions
-│
-├── logs/                       # Application logs
-│   └── app.log                 # Rotating, structured logs (auto-created)
+│       ├── icon-192.png
+│       └── icon-512.png
 │
 └── .github/
     └── workflows/
-        └── ci.yml              # GitHub Actions CI/CD pipeline
+        └── ci.yml          # GitHub Actions workflow
 
 
 
