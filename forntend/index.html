@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="InsightPulse: AI-powered sentiment analysis">
+  <title>InsightPulse – Sentiment Analysis</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <nav>
+    <button id="themeToggle" aria-label="Toggle theme" tabindex="0">🌙</button>
+  </nav>
+
+  <header>
+    <h1>InsightPulse <small>v2</small></h1>
+    <p class="tagline">AI-powered real-time sentiment analysis</p>
+  </header>
+
+  <main>
+    <section id="authSection" class="card" aria-live="polite">
+      <h2>Login</h2>
+      <form id="loginForm" class="form-grid">
+        <label for="user">Username</label>
+        <input id="user" name="user" placeholder="Enter username" required minlength="1" autocomplete="username" />
+        <label for="pass">Password</label>
+        <input id="pass" name="pass" type="password" placeholder="Enter password" required minlength="1" autocomplete="current-password" />
+        <button id="loginBtn" class="btn-primary" type="submit">Login</button>
+        <button type="button" id="demoLoginBtn" class="btn">Use Demo Credentials</button>
+      </form>
+      <p id="authError" class="error" aria-live="assertive"></p>
+    </section>
+
+    <section id="analysisSection" class="card hidden" aria-live="polite">
+      <h2>Text to Analyze</h2>
+      <form id="analyzeForm" class="form-grid">
+        <label for="textInput">Enter your text</label>
+        <textarea id="textInput" name="textInput" rows="6" placeholder="Enter text…" required></textarea>
+        <p class="hint" id="charCounter">0 characters</p>
+        <div class="actions">
+          <button id="analyzeButton" class="btn-primary" type="submit">Analyze Sentiment</button>
+          <button type="button" id="exampleButton" class="btn">Try Example</button>
+        </div>
+      </form>
+      <div id="loading" class="loading">⏳ Analyzing…</div>
+      <div id="resultsContainer" class="hidden">
+        <h3>Overall Sentiment: <span id="overallSentiment" aria-live="polite"></span> <span id="sentimentEmoji"></span></h3>
+        <div class="chart-container">
+          <canvas id="sentimentChart" aria-label="Sentiment probability chart"></canvas>
+        </div>
+        <details>
+          <summary>Show cleaned text</summary>
+          <p id="cleanedText" class="mono" aria-live="polite"></p>
+        </details>
+      </div>
+      <p id="errorMsg" class="error" aria-live="assertive"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 InsightPulse</p>
+    <p><small id="apiStatus">API: <span id="apiUrl"></span></small></p>
+  </footer>
+</body>
+</html>

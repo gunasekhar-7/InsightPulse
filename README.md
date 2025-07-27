@@ -1,169 +1,163 @@
-InsightPulse
+# InsightPulse: AI-powered Sentiment Analysis Web Application
 
+## :rocket: Overview
 
-InsightPulse is an end-to-end sentiment analysis web application that leverages machine learning and NLP techniques to identify the sentiment in user-inputted text. The platform offers a modern, accessible UI with real-time analysis, robust backend, metrics tracking, and a reproducible workflow.
+**InsightPulse** is a **production-ready, full-stack web application** for real-time sentiment analysis using machine learning. It combines a **FastAPI backend**, **state-of-the-art NLP preprocessing**, **JWT authentication**, **Redis caching**, **MongoDB persistence**, and a **modern, installable PWA frontend**—delivering an **industry-grade pipeline** from text input to visualized sentiment, ready for both demo and scaled deployment.
 
+**Ideal for:**  
+Recruiters, technical stakeholders, and developers seeking a **clear, maintainable, and cloud-native AI/ML project** with security, observability, and DevOps best practices.
 
+---
 
-🚀 Features
-Real-time Sentiment Detection: Positive, negative, or neutral classification.
+## :mag: Features
 
-Cleaned Text Display: Visualizes how your input is preprocessed before analysis.
+- **Real-time sentiment analysis** – Submit text, get instant sentiment (positive/negative/neutral) and confidence scores.
+- **Modern, responsive UI** – Dark/light theme, real-time charts, installable PWA (works offline).
+- **Secure API** – JWT authentication, rate limiting, and CORS management.
+- **ML Ops** – Train, version, and export models with full metrics tracking and reproducibility.
+- **Caching** – Redis-backed result caching for performance at scale.
+- **Structured logging** – Centralized, rotating logs for debugging and audit.
+- **Modular, typed, and documented** – Clean separation of concerns, type hints, and docstrings throughout.
+- **CI/CD** – GitHub Actions for linting, testing, and Docker builds.
+- **Dockerized** – Ready for deployment on any cloud or PaaS.
 
-Probability Breakdown: Interactive chart of sentiment probabilities.
+---
 
-Modern UI/UX: Responsive, accessible interface with dark/light mode toggle.
+## :open_file_folder: Project Structure
 
-Health and Metrics Endpoints: Easily monitor model status and view evaluation scores.
-
-Production-Ready Backend: Modular code, logging, error handling, and deployment readiness.
-
-Easy Customization: Plug in your own model or dataset for flexible extension.
-
-
-
-
-📁 Project Structure
-text
 InsightPulse/
-├── .gitignore
-├── README.md
+│
+├── .env                        # Environment variables (never committed)
+├── .env.example                # Example env file (for onboarding)
+├── .gitignore                  # Files to exclude from version control
+├── README.md                   # Project docs, setup, usage, logging overview
+│
 ├── backend/
-│   ├── venv/
-│   ├── app.py
-│   ├── train_model.py
+│   ├── main.py                 # FastAPI app entrypoint
+│   ├── requirements.txt        # Python dependencies (prod-ready)
+│   ├── Dockerfile              # Container build definition (multi-stage, secure)
+│   ├── logging_config.py       # Centralized, structured logging config
+│   │
+│   ├── core/
+│   │   ├── config.py           # Settings and environment management
+│   │   └── (your custom modules)
+│   │
+│   ├── api/
+│   │   ├── deps.py             # Authentication, rate-limiting, dependencies
+│   │   └── (future endpoints)
+│   │
 │   ├── models/
+│   │   └── __init__.py         # ML model loader, versioning, health checks
+│   │
+│   ├── services/
+│   │   ├── cache.py            # Redis-backed caching
+│   │   └── cleaner.py          # Text preprocessing/NLP cleaning
+│   │
+│   ├── train_model.py          # ML training, evaluation, and export pipeline
+│   │
+│   └── (future: test/)         # Unit/integration tests
+│
+├── frontend/
+│   ├── index.html              # Main app HTML
+│   ├── style.css               # Stylesheet (themes, responsive)
+│   ├── script.js               # All client-side logic
+│   ├── manifest.json           # PWA configuration
+│   ├── sw.js                   # Service Worker (offline/PWA)
+│   └── icons/
+│       ├── icon-192.png        # App icon
+│       └── icon-512.png        # App icon
+│
+├── models/                     # All trained model versions
+│   ├── 2025-07-23T18-30-00/    # Example timestamped model folder
 │   │   ├── tfidf_vectorizer.pkl
 │   │   ├── sentiment_model.pkl
 │   │   └── metrics.json
-│   └── requirements.txt
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
+│   └── ...                     # More model versions
+│
+├── logs/                       # Application logs
+│   └── app.log                 # Rotating, structured logs (auto-created)
+│
+└── .github/
+    └── workflows/
+        └── ci.yml              # GitHub Actions CI/CD pipeline
 
 
 
+---
 
-⚙️ Installation & Usage
+## :wrench: Quick Start
 
-1. Clone the Repository
-bash
-git clone https://github.com/your-username/InsightPulse.git
-cd InsightPulse
+### **1. Prerequisites**
+- **Python 3.12+**
+- **Docker** (for backend services and deployment)
+- **MongoDB** and **Redis** (local or Docker)
+- **Node.js/NPM** (optional, for advanced frontend tooling)
 
+### **2. Clone & Setup**
 
-2. Backend Setup
-bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+### **3. Backend**
+**API docs:** `http://localhost:8000/docs`
 
-# Train the model (ensure you have a real dataset for best results)
-python train_model.py
+### **4. Frontend**
+Open `http://localhost:8080` in your browser.
 
-# Start the backend server
-python app.py
-Backend is served at http://127.0.0.1:5000
+### **5. Train the Model**
 
-Health check endpoint: http://127.0.0.1:5000/health
+### **6. Docker**
 
+---
 
-3. Frontend Setup
-You can open frontend/index.html directly in your browser, or serve with a simple HTTP server:
+## :zap: Usage
 
-bash
-cd frontend
-python -m http.server 8000  # Access via http://localhost:8000
-For production, deploy via Netlify/Vercel and ensure API endpoint in script.js matches your backend location.
+- **Web UI:**  
+  Open `http://localhost:8080`, log in (demo: `user` / `password`), and analyze text.
+- **API:**  
+  Authenticate at `/auth/login`, then POST text to `/analyze` for sentiment.
+- **Admin:**  
+  Access `/health`, `/readiness`, and `/liveness` for operational checks.
+- **Developers:**  
+  The backend is modular, typed, and tested—ready for your extensions.
 
+---
 
+## :lock: Security & Observability
 
-🧠 Model Details
-Algorithm: Multinomial Naive Bayes (default), pluggable with other classifiers.
+- **JWT authentication** with bcrypt password hashing.
+- **Environment-based secrets** (`.env` never committed).
+- **Structured, rotating logs** (`logs/app.log`) with request correlation.
+- **Rate-limited API** to prevent abuse.
+- **Non-root container user** for Docker deployments.
 
-Vectorization: TF-IDF (max 5000 features).
+---
 
-Preprocessing: Lowercase, lemmatization, punctuation/stopword removal, and URL/mention stripping.
+## :arrows_clockwise: CI/CD
 
-Training Data: Ships with sample data; replace with a real-world dataset (IMDB/Yelp/Twitter) for production.
+- **GitHub Actions** automates linting, testing, and Docker builds on every push.
+- **Ready for Kubernetes, Render, fly.io, or any cloud**—just set your secrets and go.
 
-Metrics: Model evaluation accuracy and F1-score are logged automatically to models/metrics.json.
+---
 
+## :handshake: Contributing
 
+1. **Fork** the repository.
+2. **Branch** for your feature (`git checkout -b feature/your-feature`).
+3. **Commit** your changes (`git commit -am 'Add some feature'`).
+4. **Push** to the branch (`git push origin feature/your-feature`).
+5. **Open a Pull Request** with a clear description.
 
-🕹️ Usage
-Type or paste any text into the main input box.
+---
 
-Click Analyze Sentiment.
+## :page_with_curl: License
 
-View:
+MIT License. See `LICENSE` for details.
 
-Overall Sentiment: With icon
+---
 
-Probability Breakdown: As a bar chart
+## :bulb: Why InsightPulse?
 
-Cleaned Text: Processed input used for prediction
+- **Recruiter-ready:** Demonstrates full-stack AI/ML workflows, modularity, and production DevOps.
+- **Cloud-native:** Containerized, scalable, and observable by design.
+- **Learning-friendly:** Clean, documented, and extensible for your next project.
 
-Use the “Try Example” button for a demo, or explore in dark/light modes.
-
-
-
-💡 Customization
-Train on Your Data: Replace training data in train_model.py.
-
-Plug in Other Models: Swap out model and vectorizer; ensure matching cleaning logic.
-
-Deploy Publicly: Backend can be deployed to Railway/Render; frontend to Netlify/Vercel.
-
-Batch Analysis: Extend API for batch processing as shown in code comments.
-
-
-
-📝 Example API Usage
-
-
-text
-POST /analyze_sentiment
-Content-Type: application/json
-
-{
-  "text": "The service was friendly and prompt, but the food was just average."
-}
-
-Response:
-{
-  "sentiment": "positive",
-  "probabilities": {
-    "positive": 78.2,
-    "neutral": 12.5,
-    "negative": 9.3
-  },
-  "cleaned_text": "service friendly prompt food average"
-}
-
-
-
-
-🏅 Resume-Ready Highlights
-Production-grade preprocessing and strict consistency between training and inference.
-
-Interactive, accessible SPA frontend.
-
-Integrated health/metrics API endpoints and robust error logging.
-
-Customizable model pipeline, compatible with latest deployment workflows.
-
-
-
-🤝 Contributing
-Pull requests are welcome. Open an issue for bug fixes or new features. Please follow standard Python and frontend style guides.
-
-
-
-📣 Authors
-Developed by [Your Name].
-For professional inquiries, please contact: [your.email@example.com]
-
-Happy Analyzing! 🚀
+**Deploy, demo, and impress!**  
+If you find this useful, give it a :star: or send feedback via issues.

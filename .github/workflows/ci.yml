@@ -1,0 +1,85 @@
+name: CI
+
+on: [push, pull_request]
+
+# Cache keys for pip and NLTK
+env:
+  PIP_CACHE_DIR: ~/.cache/pip
+  NLTK_DATA: ~/.cache/nltk_data
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # If you need Redis/MongoDB for integration tests, uncomment:
+    # services:
+    #   redis:
+    #     image: redis
+    #     ports: [6379:6379]
+    #   mongodb:
+    #     image: mongo
+    #     ports: [27017:27017]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Cache pip
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.PIP_CACHE_DIR }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+        restore-keys: ${{ runner.os }}-pip-
+    - name: Cache NLTK data
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.NLTK_DATA }}
+        key: ${{ runner.os }}-nltk-${{ hashFiles('backend/requirements.txt') }}
+        restore-keys: ${{ runner.os }}-nltk-
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip setuptools wheel
+        pip install -r backend/requirements.txt
+        python -m nltk.downloader stopwords wordnet punkt
+    - name: Check code style
+      run: pip install black ruff && black --check backend/ && ruff backend/
+    - name: Run tests with coverage
+      run: |
+        pip install pytest pytest-cov
+        pytest backend/ --cov=backend --cov-report=xml --verbose
+        # TODO: Upload coverage to Codecov
+    - name: Build Docker image
+      run: docker build -t insightpulse ./backend
+    # TODO: Uncomment when you want to push images
+    # - name: Login to GitHub Container Registry
+    #   uses: docker/login-action@v2
+    #   with:
+    #     registry: ghcr.io
+    #     username: ${{ github.actor }}
+    #     password: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Tag and push image
+    #   run: |
+    #     DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/insightpulse:${{ github.sha }}
+    #     docker tag insightpulse $DOCKER_IMAGE
+    #     docker push $DOCKER_IMAGE
+
+# Uncomment for multi-arch Docker builds (advanced)
+#   buildx:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v2
+#       - name: Login to GitHub Container Registry
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Build and push multi-arch images
+#         uses: docker/build-push-action@v4
+#         with:
+#           context: ./backend
+#           platforms: linux/amd64,linux/arm64
+#           tags: ghcr.io/${{ github.repository_owner }}/insightpulse:${{ github.sha }}
+#           push: true

@@ -1,0 +1,51 @@
+# syntax=docker/dockerfile:1
+
+ARG BUILD_STAGE=builder
+
+### --- Builder stage (for dependency installation) ---
+FROM python:3.12-slim AS ${BUILD_STAGE}
+
+WORKDIR /app
+
+COPY backend/requirements.txt ./
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --user --no-cache-dir -r requirements.txt
+
+### --- Runtime stage (slim, secure, log-aware) ---
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Copy Python dependencies from builder
+COPY --from=${BUILD_STAGE} /root/.local /root/.local
+
+# Copy the required Python modules and app code
+COPY backend/models/ ./models/
+COPY backend/core/ ./core/
+COPY backend/services/ ./services/
+COPY backend/api/ ./api/
+COPY backend/main.py .
+COPY backend/logging_config.py .  # Ensure your logging config is included
+
+# Ensure /app/logs exists for log rotation
+RUN mkdir -p /app/logs && chmod 777 /app/logs
+
+# Make .local/bin accessible and set Python path
+ENV PATH=/root/.local/bin:$PATH
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+
+# Expose the API port
+EXPOSE 8000
+
+# Run as a non-root user for security
+RUN useradd -m appuser \
+ && chown -R appuser:appuser /app
+USER appuser
+
+# Healthcheck for K8s/ECS (adjust path if your health endpoint is different)
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8000/health || exit 1
+
+# Launch FastAPI with Uvicorn and clear log config guidance
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
