@@ -147,12 +147,6 @@ Open `http://localhost:8080` in your browser.
 
 ---
 
-## :page_with_curl: License
-
-MIT License. See `LICENSE` for details.
-
----
-
 ## :bulb: Why InsightPulse?
 
 - **Recruiter-ready:** Demonstrates full-stack AI/ML workflows, modularity, and production DevOps.
